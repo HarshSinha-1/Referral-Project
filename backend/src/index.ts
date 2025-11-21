@@ -30,7 +30,10 @@ app.use((req, res, next) => {
 
 // CORS configuration - consolidated into one middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // your frontend URL
+  origin: ['http://localhost:5173',
+    'https://referral-project.onrender.com'
+  ], // your frontend URL
+
   credentials: true,               // allow cookies if needed
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
