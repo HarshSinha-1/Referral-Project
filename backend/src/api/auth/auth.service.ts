@@ -6,7 +6,7 @@ import { promise, z } from 'zod';
 import config from '../../configs/config';
 import genHashvalue from  '../../utils/utils';
 import { Resend } from 'resend';
-import { createUser , CreateISVerifiedUser, findUserByemail,createOAuthUser,FindOauthUser, createOauthMethod, createUserSession, verifyCredUser,findUserSession,deleteExpiredUserSessions } from '../../Models/userModel';
+import { createUser , findUserByemail,createOAuthUser,FindOauthUser, createOauthMethod, createUserSession, verifyCredUser,findUserSession,deleteExpiredUserSessions } from '../../Models/userModel';
 import  JWT_SECRET  from '../../configs/config';
 
 enum AuthType {
@@ -309,18 +309,18 @@ export async function handleCredentialSignUp(req: Request, res: Response) {
       return res.status(400).json({ message: "Username already exists\n Please SignIn.!" });
     }
 
-    const resend = new Resend(String(config.api_resend));
-    const otp = await genHashvalue(4);
+    // const resend = new Resend(String(config.api_resend));
+    // const otp = await genHashvalue(4);
 
     const user = await createUser(username, hashedPassword, email, AuthType.CREDENTIALS);
-    const is_verified = await CreateISVerifiedUser(email, otp);
+   // const is_verified = await CreateISVerifiedUser(email, otp);
     if (!user) {
       return res.status(500).json({ message: "Failed to Register User. Please try again Again." });
     }
     return res.status(201).json({
-      message: "User created successfully. Please verify your email.",
+      message: "User created successfully.",
       email : email,
-      redirect: '/api/auth/verify',
+  
     });
   } catch (error) {
     return res.status(500).json({ 

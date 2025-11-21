@@ -1,15 +1,23 @@
 import express from 'express';
 import config from './configs/config';
+import dotenv from 'dotenv';
+import path from "path";
+
+// Fix: load .env regardless of dist/ folder
+dotenv.config({
+  path: path.resolve(__dirname, "../../.env")
+});
+
 import { createTables } from './Models/CreateTable';
 import {errorHandler} from './middlewares/error.middleware';
 import authRoutes from './api/auth/auth.routes';
 import session from 'express-session';
 import passport from 'passport'; 
-import dotenv from 'dotenv';
+
 import UserRouter from './api/user/user.route';
 import './configs/passport-config';  
 import cors from "cors";
-dotenv.config();  // Load environment variables from .env file
+  // Load environment variables from .env file
 const app = express();
 
 app.use(express.json());
@@ -50,9 +58,8 @@ app.use('/api/user', UserRouter);
 createTables();
 
 
-
-app.listen(config.port, () => {
-    console.log('Server started at:', config.port);
+app.listen(config.port || 3000, () => {
+    console.log('Server started at:', config.port || 3000);
   });
 
 export default app;

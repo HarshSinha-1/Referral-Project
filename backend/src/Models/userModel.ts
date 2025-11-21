@@ -4,7 +4,7 @@ import pool from "./db";
 import { Resend } from "resend";
 import config from "../configs/config";
 
-const resend = new Resend(String(config.api_resend));
+//const resend = new Resend(String(config.api_resend));
 
 export async function findUserByemail(email: string) {
   const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -15,8 +15,8 @@ export async function findUserByemail(email: string) {
 
 export async function createUser(username: string, password: string, email: string, auth_type: string) {
   const result = await pool.query(
-    'INSERT INTO users (username, email, password, auth_type) VALUES ($1, $2, $3, $4) RETURNING *',
-    [username, email, password,auth_type]
+    'INSERT INTO users (username, email, password, auth_type,is_verified) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+    [username, email, password,auth_type,true]
   );
   return result.rows[0];
 }
@@ -76,28 +76,28 @@ export async function deleteExpiredUserSessions(userId: number) {
 }
 
 
-export async function CreateISVerifiedUser(email: string, otp: string) {
- try {
-      const emailResponse = await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: email,
-        subject: 'OTP Verification',
-        html: `<p>Your OTP is: <strong>${otp}</strong></p>`,
-      });
+// export async function CreateISVerifiedUser(email: string, otp: string) {
+//  try {
+//       const emailResponse = await resend.emails.send({
+//         from: 'onboarding@resend.dev',
+//         to: email,
+//         subject: 'OTP Verification',
+//         html: `<p>Your OTP is: <strong>${otp}</strong></p>`,
+//       });
 
-      const result = await pool.query(
-        'INSERT INTO user_verification (email,otp) VALUES ($1, $2) RETURNING *',
-        [email, otp]
-    );
+//       const result = await pool.query(
+//         'INSERT INTO user_verification (email,otp) VALUES ($1, $2) RETURNING *',
+//         [email, otp]
+//     );
 
-    console.log('Resend email response:', emailResponse);
-      if (emailResponse.error) {
-        console.error('Resend email error:', emailResponse.error);
-      }
-    } catch (err) {
-      console.error('Error sending email:', err);
-    }
-}
+//     console.log('Resend email response:', emailResponse);
+//       if (emailResponse.error) {
+//         console.error('Resend email error:', emailResponse.error);
+//       }
+//     } catch (err) {
+//       console.error('Error sending email:', err);
+//     }
+// }
 
 export async function verifyCredUser(email: string, otp: string) {
   const result = await pool.query(

@@ -1,7 +1,11 @@
+import dotenv from 'dotenv';
+import path from "path";
+dotenv.config({
+  path: path.resolve(__dirname, "../../.env")
+});
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as GitHubStrategy } from 'passport-github2';
-import dotenv from 'dotenv';
 import { Strategy as CustomStrategy } from 'passport-custom';
 import { Request, Response, NextFunction } from 'express';
 import axios from 'axios';
@@ -9,8 +13,7 @@ import { verifyGoogleProfileAndLogin, verifyGitHubProfileAndLogin } from '../api
 import { findUserById } from '../Models/userModel';
 
 
-dotenv.config();
-
+console.log("Google Client ID:", process.env.GOOGLE_CLIENT_ID);
 // Google OAuth Strategy
 export function googleAuth(req: Request, res: Response, next: NextFunction) {
   const clientId = process.env.GOOGLE_CLIENT_ID;
