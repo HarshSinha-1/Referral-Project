@@ -7,8 +7,11 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
 
   build: {
-    sourcemap: false, // avoid any source maps that use eval
+    outDir: 'dist',  // avoid any source maps that use eval
   },
+  
+  // Render expects dist
+  
   server: {
     // optional, but you can disable HMR if needed
     hmr: {
