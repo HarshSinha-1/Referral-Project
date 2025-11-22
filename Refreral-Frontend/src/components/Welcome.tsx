@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import { ArrowRight, Star, Gift, Users, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 

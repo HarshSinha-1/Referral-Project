@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SignInSignUp = () => {
   const [isSignUpActive, setIsSignUpActive] = useState(false);
@@ -10,8 +10,11 @@ const SignInSignUp = () => {
     email: '',
     password: ''
   });
-  const [signInErrors, setSignInErrors] = useState({});
-  const [signInTouched, setSignInTouched] = useState({});
+  const [signInErrors, setSignInErrors] = useState<SignInErrors>({});
+  const [signInTouched, setSignInTouched] = useState<Record<keyof SignInData, boolean>>({
+    email: false,
+    password: false
+  });
   const [signInLoading, setSignInLoading] = useState(false);
   const [showSignInPassword, setShowSignInPassword] = useState(false);
 
@@ -22,8 +25,13 @@ const SignInSignUp = () => {
     password: '',
     confirmPassword: ''
   });
-  const [signUpErrors, setSignUpErrors] = useState({});
-  const [signUpTouched, setSignUpTouched] = useState({});
+  const [signUpErrors, setSignUpErrors] = useState<SignUpErrors>({});
+  const [signUpTouched, setSignUpTouched] = useState<Record<keyof SignUpData, boolean>>({
+    username: false,
+    email: false,
+    password: false,
+    confirmPassword: false
+  });
   const [signUpLoading, setSignUpLoading] = useState(false);
   const [showSignUpPassword, setShowSignUpPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -31,7 +39,7 @@ const SignInSignUp = () => {
   const [message, setMessage] = useState('');
 
   // Validation functions
-  const validateUsername = (username) => {
+  const validateUsername = (username: string): string => {
     if (!username) return 'Username is required';
     if (username.length < 3) return 'Username must be at least 3 characters';
     if (username.length > 20) return 'Username must be less than 20 characters';
@@ -40,14 +48,14 @@ const SignInSignUp = () => {
     return '';
   };
 
-  const validateEmail = (email) => {
+  const validateEmail = (email: string): string => {
     if (!email) return 'Email is required';
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) return 'Please enter a valid email address';
     return '';
   };
 
-  const validatePassword = (password) => {
+  const validatePassword = (password: string): string => {
     if (!password) return 'Password is required';
     if (password.length < 8) return 'Password must be at least 8 characters';
     if (!/(?=.*[a-z])/.test(password)) return 'Password must contain at least one lowercase letter';
@@ -57,7 +65,7 @@ const SignInSignUp = () => {
     return '';
   };
 
-  const validateConfirmPassword = (password, confirmPassword) => {
+  const validateConfirmPassword = (password: string, confirmPassword: string): string => {
     if (!confirmPassword) return 'Please confirm your password';
     if (password !== confirmPassword) return 'Passwords do not match';
     return '';
@@ -71,13 +79,28 @@ const SignInSignUp = () => {
     setSignUpData({ username: '', email: '', password: '', confirmPassword: '' });
     setSignInErrors({});
     setSignUpErrors({});
-    setSignInTouched({});
-    setSignUpTouched({});
+    setSignInTouched({ email: false, password: false });
+    setSignUpTouched({
+      username: false,
+      email: false,
+      password: false,
+      confirmPassword: false
+    });
     setMessage('');
   };
 
   // Sign In handlers
-  const handleSignInChange = (field, value) => {
+  interface SignInData {
+    email: string;
+    password: string;
+  }
+
+  interface SignInErrors {
+    email?: string;
+    password?: string;
+  }
+
+  const handleSignInChange = (field: keyof SignInData, value: string) => {
     setSignInData(prev => ({ ...prev, [field]: value }));
     if (signInTouched[field]) {
       let error = '';
@@ -90,9 +113,9 @@ const SignInSignUp = () => {
     }
   };
 
-  const handleSignInBlur = (field) => {
+  const handleSignInBlur = (field: keyof SignInData) => {
     setSignInTouched(prev => ({ ...prev, [field]: true }));
-    let error = '';
+    let error: string = '';
     if (field === 'email') {
       error = validateEmail(signInData.email);
     } else if (field === 'password') {
@@ -101,13 +124,13 @@ const SignInSignUp = () => {
     setSignInErrors(prev => ({ ...prev, [field]: error }));
   };
 
-  const handleSignInSubmit = async (e) => {
+  const handleSignInSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    const emailError = validateEmail(signInData.email);
-    const passwordError = validatePassword(signInData.password);
+    const emailError: string = validateEmail(signInData.email);
+    const passwordError: string = validatePassword(signInData.password);
 
-    const newErrors = {
+    const newErrors: SignInErrors = {
       email: emailError,
       password: passwordError
     };
@@ -124,7 +147,7 @@ const SignInSignUp = () => {
     setSignInLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/auth/signin', {
+      const response: Response = await fetch('http://localhost:3000/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -157,7 +180,7 @@ const SignInSignUp = () => {
         
         setSignInData({ email: '', password: '' });
         setSignInErrors({});
-        setSignInTouched({});
+        setSignInTouched({ email: false, password: false });
         
         setTimeout(() => {
             setMessage('Redirecting to dashboard...');
@@ -166,16 +189,18 @@ const SignInSignUp = () => {
       } else {
         throw new Error(res.message || 'Login failed');
       }
-    } catch (err) {
-      setMessage(err.message || 'Something went wrong.');
-      setTimeout(() => setMessage(''), 3000);
-    } finally {
+    } catch (err: unknown) {
+    const errorMessage =
+    err instanceof Error ? err.message : 'Something went wrong.';
+    setMessage(errorMessage);
+}
+ finally {
       setSignInLoading(false);
     }
   };
 
   // Sign Up handlers
-  const handleSignUpChange = (field, value) => {
+  const handleSignUpChange = (field: keyof SignUpData, value: string) => {
     setSignUpData(prev => ({ ...prev, [field]: value }));
     if (signUpTouched[field]) {
       let error = '';
@@ -192,9 +217,23 @@ const SignInSignUp = () => {
     }
   };
 
-  const handleSignUpBlur = (field) => {
+  interface SignUpData {
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }
+
+  interface SignUpErrors {
+    username?: string;
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+  }
+
+  const handleSignUpBlur = (field: keyof SignUpData) => {
     setSignUpTouched(prev => ({ ...prev, [field]: true }));
-    let error = '';
+    let error: string = '';
     if (field === 'username') {
       error = validateUsername(signUpData.username);
     } else if (field === 'email') {
@@ -207,18 +246,25 @@ const SignInSignUp = () => {
     setSignUpErrors(prev => ({ ...prev, [field]: error }));
   };
 
-const handleSignUpSubmit = async (e) => {
+interface SignUpResponse {
+  message?: string;
+  jwtToken?: string;
+  redirectUrl?: string;
+  [key: string]: any;
+}
+
+const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
   e.preventDefault();
 
-  const usernameError = validateUsername(signUpData.username);
-  const emailError = validateEmail(signUpData.email);
-  const passwordError = validatePassword(signUpData.password);
-  const confirmPasswordError = validateConfirmPassword(
+  const usernameError: string = validateUsername(signUpData.username);
+  const emailError: string = validateEmail(signUpData.email);
+  const passwordError: string = validatePassword(signUpData.password);
+  const confirmPasswordError: string = validateConfirmPassword(
     signUpData.password,
     signUpData.confirmPassword
   );
 
-  const newErrors = {
+  const newErrors: SignUpErrors = {
     username: usernameError,
     email: emailError,
     password: passwordError,
@@ -242,7 +288,7 @@ const handleSignUpSubmit = async (e) => {
   setSignUpLoading(true);
 
   try {
-    const response = await fetch('https://referral-project.onrender.com/auth/signup', {
+    const response: Response = await fetch('http://localhost:3000/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -256,13 +302,13 @@ const handleSignUpSubmit = async (e) => {
       })
     });
 
-    const res = await response.json();
+    const res: SignUpResponse = await response.json();
 
     if (response.ok) {
       setMessage('Account created successfully!');
       setSignUpData({ username: '', email: '', password: '', confirmPassword: '' });
       setSignUpErrors({});
-      setSignUpTouched({});
+      setSignUpTouched({} as Record<keyof SignUpData, boolean>);
 
       // Redirect directly to SIGNIN
       setTimeout(() => navigate('/signin'), 1500);
@@ -271,9 +317,10 @@ const handleSignUpSubmit = async (e) => {
       throw new Error(res.message || 'Signup failed');
     }
 
-  } catch (err) {
-    setMessage(err.message || 'Something went wrong.');
-    setTimeout(() => setMessage(''), 3000);
+  } catch (err: unknown) {
+    const errorMessage =
+    err instanceof Error ? err.message : 'Something went wrong.';
+    setMessage(errorMessage);
   } finally {
     setSignUpLoading(false);
   }
@@ -281,8 +328,12 @@ const handleSignUpSubmit = async (e) => {
 
 
   // Social Login Handler
-  const handleSocialLogin = (provider) => {
-    const backendURL = 'https://referral-project.onrender.com/auth';
+  interface SocialLoginProvider {
+    provider: 'Google' | 'GitHub';
+  }
+
+  const handleSocialLogin = (provider: SocialLoginProvider['provider']) => {
+    const backendURL = 'http://localhost:3000/auth/signin';
 
     if (provider === 'Google') {
       window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=794186765503-qvhanhrou67qu77mg1q23gd51t35dnlk.apps.googleusercontent.com&redirect_uri=http://localhost:3000/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent';

@@ -31,7 +31,7 @@ export default function UseReferral() {
       if (!token) return navigate("/signin");
 
       const response = await fetch(
-        "https://referral-project.onrender.com/api/user/use-referral-code",
+        "http://localhost:3000/api/user/use-referral-code",
         {
           method: "POST",
           headers: {
