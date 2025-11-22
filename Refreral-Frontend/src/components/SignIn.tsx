@@ -147,7 +147,7 @@ const SignInSignUp = () => {
     setSignInLoading(true);
 
     try {
-      const response: Response = await fetch('https://referral-project.onrender.comauth/signin', {
+      const response: Response = await fetch('https://referral-project.onrender.com/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
