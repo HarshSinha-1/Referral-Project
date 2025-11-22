@@ -288,7 +288,7 @@ const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<
   setSignUpLoading(true);
 
   try {
-    const response: Response = await fetch('http://localhost:3000/auth/signup', {
+    const response: Response = await fetch('https://referral-project.onrender.com/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -333,7 +333,7 @@ const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<
   }
 
   const handleSocialLogin = (provider: SocialLoginProvider['provider']) => {
-    const backendURL = 'http://localhost:3000/auth/signin';
+    const backendURL = 'https://referral-project.onrender.com/auth/signin';
 
     if (provider === 'Google') {
       window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=794186765503-qvhanhrou67qu77mg1q23gd51t35dnlk.apps.googleusercontent.com&redirect_uri=http://localhost:3000/auth/google/callback&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent';

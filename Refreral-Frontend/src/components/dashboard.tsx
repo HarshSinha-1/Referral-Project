@@ -54,7 +54,7 @@ export default function Dashboard() {
           return;
         }
 
-        const response = await fetch("http://localhost:3000/api/user/info", {
+        const response = await fetch("https://referral-project.onrender.com/api/user/info", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -87,7 +87,7 @@ export default function Dashboard() {
       }
 
       const response = await fetch(
-        "http://localhost:3000/api/user/getReferral-code",
+        "https://referral-project.onrender.com/api/user/getReferral-code",
         {
           method: "POST",
           headers: {

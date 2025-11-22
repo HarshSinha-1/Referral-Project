@@ -236,7 +236,7 @@ const SignUp = () => {
 
   setIsLoading(true);
   try {
-    const res = await axios.post('http://localhost:3000/auth/signup', {
+    const res = await axios.post('https://referral-project.onrender.com/auth/signup', {
       username,
       email,
       password,
@@ -263,11 +263,11 @@ const SignUp = () => {
 
 
   const handleSocialLogin = (provider: 'Google' | 'GitHub') => {
-  let backendURL = 'http://localhost:3000/auth'; // change this to your backend base if deployed
+  let backendURL = 'https://referral-project.onrender.com//auth'; // change this to your backend base if deployed
 
   if (provider === 'Google') {
     const googleClientId = '44992330024-6ru43vbhi3agflros0lbi6ar3g1c7nce.apps.googleusercontent.com';
-    const redirectUri = 'http://localhost:3000/auth/google/callback';
+    const redirectUri = 'https://referral-project.onrender.com/auth/google/callback';
     const scope = 'profile email';
     const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}`;
     window.location.href = oauthUrl;
