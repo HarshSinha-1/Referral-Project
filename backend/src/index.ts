@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 app.use(cors({
   origin: ['http://localhost:5173',
     "https://referral-project-peach.vercel.app",
-    "https://referral-project.onrender.com"
+    "https://referral-project-gl81.onrender.com"
 
   ], // your frontend URL
   credentials: true,               // allow cookies if needed
