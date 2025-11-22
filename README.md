@@ -65,4 +65,4 @@ Both **backend** and **frontend** are live on Render.
 
 # 🌐 Live Demo URLs  :  https://referral-project-gl81.onrender.com/
 
-### 🔥 **Backend (API)**  
+### 🔥 **Backend URL (if BE sleeped)** :   https://referral-project.onrender.com/
