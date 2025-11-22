@@ -14,5 +14,11 @@ export default defineConfig({
     hmr: {
       overlay: false
     }
+  },
+
+  preview: {
+    host: true,
+    // 👇 IMPORTANT: Add your Render URL here!!
+    allowedHosts: ["referral-project-gl81.onrender.com"],
   }
 })
