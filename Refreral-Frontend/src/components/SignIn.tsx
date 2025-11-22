@@ -253,6 +253,7 @@ interface SignUpResponse {
   [key: string]: any;
 }
 
+
 const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
   e.preventDefault();
 
