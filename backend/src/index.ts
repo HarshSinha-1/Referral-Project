@@ -27,13 +27,14 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.path} - Origin: ${req.headers.origin}`);
   next();
 });
-
-// CORS configuration - consolidated into one middleware
+ 
+// 1. Define ONE CORS config
 app.use(cors({
   origin: ['http://localhost:5173',
-    'https://referral-project.onrender.com'
-  ], // your frontend URL
+    "https://referral-project-peach.vercel.app",
+    "https://referral-project.onrender.com"
 
+  ], // your frontend URL
   credentials: true,               // allow cookies if needed
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
@@ -41,15 +42,12 @@ app.use(cors({
 
 // Add CORS preflight handling for all routes
 app.options(/.*/, cors());
-
-//app.use('/api/user', userRoutes);
 console.log(config.Session_secret)
 app.use(session({
   secret: config.Session_secret,  // Set a secret key for session encryption
   resave: false,
   saveUninitialized: true,
 }));
-
 
 
 app.use(passport.initialize());  // Initialize Passport.js
