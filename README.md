@@ -1,3 +1,5 @@
+### 🔥 **Backend URL (if BE sleeped)**  hit on :   https://referral-project.onrender.com/
+
 # 🚀 Referral Rewards Platform  
 A full-stack **Refer & Earn** platform built using **React + Node.js + PostgreSQL**, supporting secure authentication, referral-based coin rewards, and OAuth (coming soon).  
 Both **backend** and **frontend** are live on Render.
@@ -65,4 +67,4 @@ Both **backend** and **frontend** are live on Render.
 
 # 🌐 Live Demo URLs  :  https://referral-project-gl81.onrender.com/
 
-### 🔥 **Backend URL (if BE sleeped)** :   https://referral-project.onrender.com/
+
